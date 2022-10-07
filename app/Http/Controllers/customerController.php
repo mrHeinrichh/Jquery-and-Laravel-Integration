@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use View;
 use Illuminate\Http\Request;
 use App\Models\customer;
 class CustomerController extends Controller
