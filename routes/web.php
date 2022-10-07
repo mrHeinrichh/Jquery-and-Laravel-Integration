@@ -18,4 +18,3 @@ Route::get('/', function () {
 });
 
 
-Route::resource('customer', 'customerController');
