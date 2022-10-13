@@ -27,14 +27,12 @@
 
 <body>
 
-    <div class="container">
+    <div id="customers" class="container">
         <button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#myModal">ADD <span
                 class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-            Launch demo modal
-        </button>
         </a>
+        <button type="button" class="btn btn-info btn-lg" id="item">Swap<span class="glyphicon glyphicon-plus"
+                aria-hidden="true"></span></button>
 
 
         <div class="table-responsive">
@@ -46,10 +44,13 @@
                         <th>lname</th>
                         <th>fname</th>
                         <th>address</th>
-                        <th>phone</th>
+                        <th>town</th>
+                        <th>zipcode</th>
+                        <th>number</th>
+                        <th>credit limit</th>
+                        <th>level</th>
                         <th>Edit</th>
                         <th>Delete</th>
-                        <th>Restore</th>
                     </tr>
                 </thead>
                 <tbody id="cbody">
@@ -57,7 +58,6 @@
             </table>
         </div>
     </div>
-
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -129,60 +129,178 @@
             </div>
         </div>
     </div>
-    <div class="modal" id="myModal" role="dialog">
+
+    <div class="modal fade" id="editModal" role="dialog" style="display:none">
         <div class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Create new customer</h4>
+                    <h4 class="modal-title">Update customer</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  
-                    <form id="cform" method="post" action="#">
-                        
+                    <form id="updateform" method="#" action="#">
+                        {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
+                        {{-- <input type="hidden" name="_method" value="PUT"> --}}
                         <div class="form-group">
-                            <label for="title" class="control-label">Title</label>
-                            <input type="text" class="form-control" id="titulo" name="title">
-                               
+                            <label for="etitle" class="control-label">Title</label>
+                            <input type="text" class="form-control" id="etitle" name="title">
                         </div>
                         <div class="form-group">
-                            <label for="lname" class="control-label">last name</label>
-                            <input type="text" class="form-control " id="lname" name="lname">
-                                
+                            <label for="title" class="control-label">UserId</label>
+                            <input type="text" class="form-control" id="euserid" name="user_id">
                         </div>
                         <div class="form-group">
-                            <label for="fname" class="control-label">First Name</label>
-                            <input type="text" class="form-control " id="fname" name="fname">
-                                
+                            <label for="elname" class="control-label">last name</label>
+                            <input type="text" class="form-control " id="elname" name="lname">
                         </div>
                         <div class="form-group">
-                            <label for="address" class="control-label">Address</label>
-                            <input type="text" class="form-control" id="address" name="addressline">
-                           
+                            <label for="efname" class="control-label">First Name</label>
+                            <input type="text" class="form-control " id="efname" name="fname">
                         </div>
                         <div class="form-group">
-                            <label for="town" class="control-label">Town</label>
-                            <input type="text" class="form-control" id="town" name="town">
+                            <label for="eaddress" class="control-label">Address</label>
+                            <input type="text" class="form-control" id="eaddress" name="addressline">
                         </div>
                         <div class="form-group">
-                            <label for="zipcode" class="control-label">Zip code</label>
-                            <input type="text" class="form-control" id="zipcode" name="zipcode">
+                            <label for="etown" class="control-label">Town</label>
+                            <input type="text" class="form-control" id="etown" name="town">
                         </div>
                         <div class="form-group">
-                            <label for="phone" class="control-label">Phone</label>
-                            <input type="text" class="form-control" id="phone" name="phone">
+                            <label for="ezipcode" class="control-label">Zip code</label>
+                            <input type="text" class="form-control" id="ezipcode" name="zipcode">
+                        </div>
+                        <div class="form-group">
+                            <label for="ephone" class="control-label">Phone</label>
+                            <input type="text" class="form-control" id="ephone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="zipcode" class="control-label">Credit</label>
+                            <input type="text" class="form-control" id="ecredit" name="creditlimit">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="control-label">level</label>
+                            <input type="text" class="form-control" id="elevel" name="level">
                         </div>
                 </div>
                 </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                    <button id="updatebtn" type="submit" class="btn btn-primary">Update</button>
+                </div>
             </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button id="myFormSubmit" type="submit" class="btn btn-primary">Save</button>
+        </div>
     </div>
+
+    <div id="items" class="container">
+
+        <button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#itemModal">add<span
+                class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+
+        <button type="button" class="btn btn-info btn-lg" id="customerbtn">Swap<span class="glyphicon glyphicon-plus"
+                aria-hidden="true"></span></button>
+
+        <div class="table-responsive">
+            <table id="itable" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Item ID</th>
+                        <th>Description</th>
+                        <th>Sell price</th>
+                        <th>Cost price</th>
+                        <th>Title</th>
+                        <th>Image</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="ibody">
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    <div class="modal fade" id="itemModal" role="dialog" style="display:none">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Create new item</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="iform" method="#" action="#" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="desc" class="control-label">Description</label>
+                            <input type="text" class="form-control" id="desc" name="description">
+                        </div>
+                        <div class="form-group">
+                            <label for="cost" class="control-label">Cost Price</label>
+                            <input type="text" class="form-control " id="cost" name="cost_price">
+                        </div>
+                        <div class="form-group">
+                            <label for="sell" class="control-label">sell price</label>
+                            <input type="text" class="form-control " id="sell" name="sell_price">
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="control-label">title</label>
+                            <input type="text" class="form-control " id="title" name="title">
+                        </div>
+                        <div class="form-group">
+                            <label for="img" class="control-label">img</label>
+                            <input type="file" class="form-control" id="img" name="img" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="itemSubmit" type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="modal fade" id="editItem" role="dialog" style="display:none">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update item</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateItem" method="#" action="#" enctype="multipart/form-data">
+                        {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
+                        {{-- <input type="hidden" name="_method" value="PUT"> --}}
+                        <div class="form-group">
+                            <label for="idescription" class="control-label">Description</label>
+                            <input type="text" class="form-control" id="idescription" name="description">
+                        </div>
+                        <div class="form-group">
+                            <label for="icost" class="control-label">Cost Price</label>
+                            <input type="text" class="form-control " id="icost" name="cost_price">
+                        </div>
+                        <div class="form-group">
+                            <label for="isell" class="control-label">sell price</label>
+                            <input type="text" class="form-control " id="isell" name="sell_price">
+                        </div>
+                        <div class="form-group">
+                            <label for="ititle" class="control-label">title</label>
+                            <input type="text" class="form-control " id="ititle" name="title">
+                        </div>
+                        <div class="form-group">
+                            <label for="iimg" class="control-label">img</label>
+                            <input type="file" class="form-control" id="iimg" name="img" />
+                        </div>
+                </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                    <button id="btnItem" type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </div>
+        </div>
     </div>
+
 </body>
 
 </html>
