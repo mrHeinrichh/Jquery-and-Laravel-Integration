@@ -1,8 +1,13 @@
-<link href="https://maxcdn.bootstrapcdn.com/.../css/bootstrap.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/.../js/bootstrap.min.js"></script>
-<script src="https://kit.fontawesome.com/c88097f817.js" crossorigin="anonymous"></script>
-<script src="{{asset('js/custom.js')}}"></script>
-<script type="text/javascript">
-    var token = '{{ csrf_token() }}';
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item</title>
+</head>
+<body>
+    @yield('body')
+    @include('layouts.header')
+</body>
+</html>
