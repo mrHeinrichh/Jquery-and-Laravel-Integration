@@ -16,6 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::resource('customer', 'customerController');
-
+Route::resource('customer', 'CustomerController');
+Route::resource('item', 'ItemController');
+route::get('/item-index', 'ItemController@getItem');
