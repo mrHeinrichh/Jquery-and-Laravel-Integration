@@ -18,4 +18,5 @@ Route::get('/', function () {
 });
 Route::resource('customer', 'CustomerController');
 Route::resource('item', 'ItemController');
-route::get('/item-index', 'ItemController@getItem');
+// route::get('/item-index', 'ItemController@getItem');
+Route::view('/item-index', 'item.index');
