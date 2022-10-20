@@ -15,12 +15,16 @@ class ItemController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()){
-            $items = Item::orderBy('item_id', 'DESC')->get();
-            return response()->json($items);
-        }
+        // if ($request->ajax()){
+        $items = Item::orderBy('item_id')->get();
+        return response()->json($items);
+        // }
     }
 
+    public function getItem()
+    {
+        return view('Item.index');
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -78,7 +82,7 @@ class ItemController extends Controller
         // if ($request->ajax()) {
         $items = Item::find($id);
         $items = $items->update($request->all());
-         return response()->json($items);
+        return response()->json($items);
         // } 
     }
 
@@ -92,7 +96,9 @@ class ItemController extends Controller
     {
         $items = Item::findOrFail($id);
         $items->delete();
-        return response()->json(["success" => "item deleted successfully.",
-             "status" => 200]);
+        return response()->json([
+            "success" => "item deleted successfully.",
+            "status" => 200
+        ]);
     }
 }
