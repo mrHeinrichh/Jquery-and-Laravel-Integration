@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use View;
+use Storage;
 
 class ItemController extends Controller
 {
@@ -32,7 +33,8 @@ class ItemController extends Controller
      */
     public function create()
     {
-        //
+   
+
     }
 
     /**
@@ -43,8 +45,19 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        $items = Item::create($request->all());
-        return response()->json($items);
+        // $items = Item::create($request->all());
+        // return response()->json($items);
+         
+        $item = new Item;
+        $item ->description = $request->description;
+        $item->sell_price = $request->sell_price;
+        $item->cost_price = $request->cost_price;
+        $item->title = $request->title;
+        $files = $request->file('uploads');
+        $item->img_path = 'images/'.$files->getClientOriginalName();
+        $item->save();
+        storage::put('public/images/'.$files->getClientOriginalName(),file_get_contents($files));
+        return response()->json(["success" => "item created successfully.", "item" => $item, "status" => 200]);
     }
 
     /**
