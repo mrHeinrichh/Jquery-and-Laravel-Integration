@@ -18,6 +18,19 @@ Route::get('/', function () {
 });
 
 Route::resource('customer', 'CustomerController');
+
 Route::resource('item', 'ItemController');
-// route::get('/item-index', 'ItemController@getItem');
-route::view('/item-index', 'item.index');
+
+route::view('/item-index', 'Item.Index');
+route::view('/shop', 'shop.Index');
+
+Route::post('/item/checkout', [
+    'uses' => 'ItemController@postCheckout',
+    'as' => 'checkout'
+]);
+
+route::view('/dashboard', 'dashboard.Index');
+  Route::post('/item/checkout',[
+    'uses' => 'ItemController@postCheckout',
+    'as' => 'checkout'
+]);
