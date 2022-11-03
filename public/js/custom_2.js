@@ -1,184 +1,4 @@
 $(document).ready(function () {
-  $('#itemModal').on('show.bs.modal', function (e) {
-    var id = $(e.relatedTarget).attr('data-id')
-    // console.log(id);
-    $('<input>')
-      .attr({ type: 'hidden', id: 'itemid', name: 'item_id', value: id })
-      .appendTo('#iform')
-    $.ajax({
-      type: 'GET',
-      url: '/api/item/' + id + '/edit',
-      success: function (data) {
-        // console.log(data);
-        $('#desc').val(data.description)
-        $('#sell').val(data.sell_price)
-        $('#cost').val(data.cost_price)
-        $('#image').val(data.img_path)
-      },
-      error: function () {
-        console.log('AJAX load did not work')
-        alert('error')
-      },
-    })
-  })
-  $('#itemSubmit').on('click', function (e) {
-    // e.preventDefault();
-    // alert("test");
-    var id = $('#itemid').val()
-    // var data = $("#updateform").serialize();
-    var data = $('#iform')[0]
-    // console.log(data);
-    let formData = new FormData($('#iform')[0])
-    // console.log(data);
-    $.ajax({
-      type: 'POST', //PUT
-      url: '/api/item/' + id,
-      data: formData,
-      contentType: false,
-      processData: false,
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-      },
-      dataType: 'json',
-      success: function (data) {
-        console.log(data)
-        $('#itemModal').each(function () {
-          $(this).modal('hide')
-        })
-        $('tr td:contains(' + id + ')').remove()
-        var img =
-          '<img src=' + data.img_path + " width='200px', height='200px'/>"
-        var tr = $('<tr>')
-        tr.append($('<td>').html(data.item_id))
-        tr.append($('<td>').html(data.description))
-        tr.append($('<td>').html(data.cost_price))
-        tr.append($('<td>').html(data.sell_price))
-        tr.append($('<td>').html(data.title))
-        tr.append($('<td>').html(img))
-        tr.append(
-          "<td align='center'><a href='#' data-bs-toggle='modal' data-bs-target='#itemModal' id='editbtn' data-id=" +
-            data.item_id +
-            "><i class='fa fa-pencil-square-o' aria-hidden='true' style='font-size:24px' ></a></i></td>",
-        )
-        tr.append(
-          "<td><a href='#'  class='deletebtn' data-id=" +
-            data.item_id +
-            "><i  class='fa fa-trash-o' style='font-size:24px; color:red' ></a></i></td>",
-        )
-        $('#itable').prepend(tr.hide().fadeIn(5000))
-      },
-      error: function (error) {
-        console.log(error)
-      },
-    })
-  })
-
-  $('#ibody').on('click', '.deletebtn', function (e) {
-    var id = $(this).data('id')
-    var $tr = $(this).closest('tr')
-    // var id = $(e.relatedTarget).attr('id');
-    console.log(id)
-    e.preventDefault()
-    bootbox.confirm({
-      message: 'do you want to delete this item',
-      buttons: {
-        confirm: {
-          label: 'yes',
-          className: 'btn-success',
-        },
-        cancel: {
-          label: 'no',
-          className: 'btn-danger',
-        },
-      },
-      callback: function (result) {
-        if (result)
-          $.ajax({
-            type: 'DELETE',
-            url: '/api/item/' + id,
-            headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            },
-            dataType: 'json',
-            success: function (data) {
-              console.log(data)
-              // bootbox.alert('success');
-              $tr.find('td').fadeOut(2000, function () {
-                $tr.remove()
-              })
-            },
-            error: function (error) {
-              console.log(error)
-            },
-          })
-      },
-    })
-  })
-
-  $('#editItem').on('show.bs.modal', function (e) {
-    var id = $(e.relatedTarget).attr('data-id')
-    console.log(id)
-    $('<input>')
-      .attr({
-        type: 'hidden',
-        id: 'itemid',
-        name: 'item_id',
-        value: id,
-      })
-      .appendTo('#updateItem')
-    $.ajax({
-      type: 'GET',
-      url: '/api/item/' + id + '/edit',
-      success: function (data) {
-        console.log(data)
-        $('#idescription').val(data.description)
-        $('#icost').val(data.cost_price)
-        $('#isell').val(data.sell_price)
-        $('#ititle').val(data.title)
-        $('#iimg').val(data.img)
-      },
-      error: function () {
-        console.log('AJAX load did not work')
-        alert('error')
-      },
-    })
-  })
-
-  $('#editItem').on('hidden.bs.modal', function (e) {
-    $('#updateItem').trigger('reset')
-    $('#itemid').remove()
-  })
-
-  $('#btnItem').on('click', function (e) {
-    var id = $('#itemid').val()
-    var data = $('#updateItem').serialize()
-    console.log(data)
-    $.ajax({
-      type: 'PUT',
-      url: '/api/item/' + id,
-      data: data,
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-      },
-      dataType: 'json',
-      success: function (data) {
-        console.log(data)
-        $('#editItem').each(function () {
-          $(this).modal('hide')
-          window.location.reload()
-        })
-      },
-      error: function (error) {
-        console.log(error)
-      },
-    })
-  })
-
-  $('#customerbtn').on('click', function (e) {
-    e.preventDefault()
-    $('#items').hide('slow')
-    $('#customers').show()
-  })
   $('#itable').DataTable({
     ajax: {
       url: '/api/item',
@@ -221,16 +41,20 @@ $(document).ready(function () {
         data: 'title',
       },
       {
-        data: 'imagePath',
-        render: function (data, type, row) {
-          return '<img src="' + data + '" height="50" width="50"/>'
+        data: null,
+        render: function (data, type, JsonResultRow, row) {
+          return (
+            '<img src="/storage/' +
+            JsonResultRow.imagePath +
+            '" height="100px" width="100px">'
+          )
         },
       },
       {
         data: null,
         render: function (data, type, row) {
           return (
-            "<a href='#' data-bs-toggle='modal' data-bs-target='#editModal' id='editbtn' data-id=" +
+            "<a href='#' class='editBtn' id='editbtn' data-id=" +
             data.item_id +
             "><i class='fa-solid fa-pen' aria-hidden='true' style='font-size:24px' ></i></a><a href='#' class='deletebtn' data-id=" +
             data.item_id +
@@ -239,6 +63,138 @@ $(document).ready(function () {
         },
       },
     ],
+  })
+
+  $('#itemSubmit').on('click', function (e) {
+    e.preventDefault()
+    var data = $('#iform')[0]
+    console.log(data)
+    let formData = new FormData(data)
+    console.log(formData)
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ',' + pair[1])
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: '/api/item/',
+      data: formData,
+      contentType: false,
+      processData: false,
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+      },
+      dataType: 'json',
+      success: function (data) {
+        console.log(data)
+        $('#itemModal').modal('hide')
+        var $itable = $('#itable').DataTable()
+        $itable.row.add(data.item).draw(false)
+      },
+      error: function (error) {
+        console.log(error)
+      },
+    })
+  })
+
+  $('#itable tbody').on('click', 'a.deletebtn', function (e) {
+    var table = $('#itable').DataTable()
+    var id = $(this).data('id')
+    var $row = $(this).closest('tr')
+
+    console.log(id)
+    e.preventDefault()
+    bootbox.confirm({
+      message: 'do you want to delete this item',
+      buttons: {
+        confirm: {
+          label: 'yes',
+          className: 'btn-success',
+        },
+        cancel: {
+          label: 'no',
+          className: 'btn-danger',
+        },
+      },
+      callback: function (result) {
+        console.log(result)
+        if (result)
+          $.ajax({
+            type: 'DELETE',
+            url: '/api/item/' + id,
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+            dataType: 'json',
+            success: function (data) {
+              console.log(data)
+              // bootbox.alert('success');
+              $row.fadeOut(4000, function () {
+                table.row($row).remove().draw(false)
+              })
+              bootbox.alert(data.success)
+            },
+            error: function (error) {
+              console.log('error')
+            },
+          })
+      },
+    })
+  })
+
+  $('#itable tbody').on('click', 'a.editBtn', function (e) {
+    e.preventDefault()
+    $('#itemModal').modal('show')
+    var id = $(this).data('id')
+
+    $.ajax({
+      type: 'GET',
+      url: '/api/item/' + id + '/edit',
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+      },
+      dataType: 'json',
+      success: function (data) {
+        console.log(data)
+        $('#item_id').val(data.item_id)
+        $('#description').val(data.description)
+        $('#cost_price').val(data.cost_price)
+        $('#sell_price').val(data.sell_price)
+        $('#title').val(data.title)
+      },
+      error: function (error) {
+        console.log('error')
+      },
+    })
+  })
+
+  $('#itemupdate').on('click', function (e) {
+    e.preventDefault()
+    // var id = $(e.relatedTarget).attr("data-id");
+    var id = $('#item_id').val()
+    console.log(id)
+
+    var crow = $('tr td:contains(' + id + ')').closest('tr')
+    var table = $('#itable').DataTable()
+    var data = $('#iform').serialize()
+
+    $.ajax({
+      type: 'PUT',
+      url: '/api/item/' + id,
+      data: data,
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+      },
+      dataType: 'json',
+      success: function (data) {
+        console.log(data)
+        $('#itemModal').modal('hide')
+        table.row(crow).data(data).invalidate().draw(false)
+      },
+      error: function (error) {
+        console.log(error)
+      },
+    })
   })
 
   $('#items').hide()
