@@ -23,13 +23,13 @@
 
 <div class="container">
 
-    <!-- <button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#itemModal">New
+    {{-- <button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#itemModal">New
         Item
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
 
     <button type="button" class="btn btn-info btn-lg" id="customerbtn" style="float: right">Show
         Customers<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-    <div class="table-responsive"> -->
+    <div class="table-responsive"> --}}
 
         <table id="itable" class="table table-striped table-hover">
             <thead>
@@ -56,36 +56,41 @@
                 <h4 class="modal-title">Create new item</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id="iform" method="#" action="#" enctype="multipart/form-data">
+            <div style="padding: 0 2rem;">
+                <form id="iform" action="#" method="#" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="desc" class="control-label">Description</label>
-                        <input type="text" class="form-control" id="desc" name="description">
+                        <input type="hidden" class="form-control item_id" id="item_id" name="item_id">
                     </div>
                     <div class="form-group">
-                        <label for="cost" class="control-label">Cost Price</label>
-                        <input type="text" class="form-control " id="cost" name="cost_price">
+                        <label for="description" class="control-label">Description</label>
+                        <input type="text" class="form-control" id="description" name="description">
                     </div>
                     <div class="form-group">
-                        <label for="sell" class="control-label">sell price</label>
-                        <input type="text" class="form-control " id="sell" name="sell_price">
+                        <label for="cost_price" class="control-label">CostPrice</label>
+                        <input type="text" class="form-control" id="cost_price" name="cost_price">
                     </div>
                     <div class="form-group">
-                        <label for="title" class="control-label">title</label>
-                        <input type="text" class="form-control " id="title" name="title">
+                        <label for="sell_price" class="control-label">SellPrice</label>
+                        <input type="text" class="form-control " id="sell_price" name="sell_price">
                     </div>
                     <div class="form-group">
-                        <label for="img_path" class="control-label">img_path</label>
-                        <input type="file" class="form-control" id="img_path" name="img_path" />
+                        <label for="title" class="control-label">Title</label>
+                        <input type="text" class="form-control " id="title" name=" ">
+                    </div>
+                    <div class="form-group">
+                        <label for="uploads" class="control-label">Item Image</label>
+                        <input type="file" class="form-control" id="uploads" name="uploads">
                     </div>
                 </form>
             </div>
+
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                 <button id="itemSubmit" type="submit" class="btn btn-primary">Save</button>
+                <button id="itemupdate" type="submit" class="btn btn-primary">Update</button>
             </div>
         </div>
     </div>
 </div>
-
 @endsection
